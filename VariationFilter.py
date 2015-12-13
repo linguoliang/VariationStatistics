@@ -4,8 +4,6 @@ version = '1.0.1'
 bugfixs = ''
 import sys, getopt
 import time
-
-
 def trim(y):
     y = y.replace("[", '')
     y = y.replace(']', '')
