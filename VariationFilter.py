@@ -16,7 +16,6 @@ def trim(y):
     y = y + '\n'
     return y
 
-
 print('%s software version is %s' % (Softwarename, version))
 print(bugfixs)
 print('starts at :' + time.strftime('%Y-%m-%d %H:%M:%S'))
