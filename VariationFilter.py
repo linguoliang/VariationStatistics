@@ -51,15 +51,17 @@ print('%s software version is %s' % (Softwarename, version))
 print(bugfixs)
 print('starts at :' + time.strftime('%Y-%m-%d %H:%M:%S'))
 
-opts, args = getopt.getopt(sys.argv[1:], 'i:h', ['inputfile=', 'help'])
+opts, args = getopt.getopt(sys.argv[1:], 'i:t:h', ['inputfile=','type=', 'help'])
 InputFileName = ''
 for o, a in opts:
     if o in ['-i', '--inputfile']:
         fpkm = a
+    elif o in ['-t','--type']:
+        etype=a
     elif o in ['-h', '--help']:
         help = True
 with open(InputFileName, 'w') as InputFile:
-    with open(InputFileName+'-cds','w') as cds:
+    with open(InputFileName+'-'+etype,'w') as cds:
         with open(InputFileName+'-intron','w') as intron:
             with open(InputFileName+'-utr','w') as utr:
                 with open(InputFileName+'-intergenic','w') as intergenic:
@@ -68,14 +70,14 @@ with open(InputFileName, 'w') as InputFile:
                         if scaffold!=listitem[0]:
                             GenesList=[]
                             ExonsList=[]
-                        if listitem[2]=='CDS':
+                        if listitem[2]==etype:
                             cds.write(trim(str(listitem)))
                         elif listitem[2].find('UTR')!=-1:
                             utr.write(trim(str(listitem)))
-                        elif listitem[2]=='exon':
-                            convert_to_type(listitem,ExonsList,intron,'intron',gene)
                         elif listitem[2]=='gene':
                             tmpname=gene
                             gene=listitem[-1]
                             convert_to_type(listitem,GenesList,intergenic,'intergenic',tmpname+';'+gene)
                             ExonsList=[]
+                        if listitem[2]=='exon':
+                            convert_to_type(listitem,ExonsList,intron,'intron',gene)
