@@ -81,3 +81,4 @@ with open(InputFileName, 'w') as InputFile:
                             ExonsList=[]
                         if listitem[2]=='exon':
                             convert_to_type(listitem,ExonsList,intron,'intron',gene)
+print('starts at :' + time.strftime('%Y-%m-%d %H:%M:%S'))
