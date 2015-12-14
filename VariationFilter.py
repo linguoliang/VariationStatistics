@@ -16,6 +16,37 @@ def trim(y):
     y = y + '\n'
     return y
 
+
+def set_to_type(list_item, file,string,genestring):
+    """
+
+    :param listitem:listitem
+    :param file:file intergenic or intron
+    """
+    list_item[2] = string
+    list_item[3] = str(int(ExonsList[-2][1]) + 1)
+    list_item[4] = str(int(ExonsList[-1][0]) - 1)
+    list_item[-1] = genestring
+    file.write(trim(str(list_item)))
+def convert_to_type(list_item,list_type,file,string,genestring):
+    """
+
+    :param list_item: listitem
+    :param list_type: ExonsList or GeneList
+    :param file: file intergenic or intron
+    """
+    tmp=list_item[3:5]
+    list_type.append(tmp)
+    if len(list_type)>2:
+        list_type.pop(0)
+        set_to_type(list_item,file,string,genestring)
+    elif len(list_type)==2:
+        set_to_type(list_item,file,string,genestring)
+ExonsList= []
+GenesList=[]
+scaffold=''
+gene=''
+genelist=[]
 print('%s software version is %s' % (Softwarename, version))
 print(bugfixs)
 print('starts at :' + time.strftime('%Y-%m-%d %H:%M:%S'))
@@ -28,3 +59,23 @@ for o, a in opts:
     elif o in ['-h', '--help']:
         help = True
 with open(InputFileName, 'w') as InputFile:
+    with open(InputFileName+'-cds','w') as cds:
+        with open(InputFileName+'-intron','w') as intron:
+            with open(InputFileName+'-utr','w') as utr:
+                with open(InputFileName+'-intergenic','w') as intergenic:
+                    for item in InputFile:
+                        listitem=item.split();
+                        if scaffold!=listitem[0]:
+                            GenesList=[]
+                            ExonsList=[]
+                        if listitem[2]=='CDS':
+                            cds.write(trim(str(listitem)))
+                        elif listitem[2].find('UTR')!=-1:
+                            utr.write(trim(str(listitem)))
+                        elif listitem[2]=='exon':
+                            convert_to_type(listitem,ExonsList,intron,'intron',gene)
+                        elif listitem[2]=='gene':
+                            tmpname=gene
+                            gene=listitem[-1]
+                            convert_to_type(listitem,GenesList,intergenic,'intergenic',tmpname+';'+gene)
+                            ExonsList=[]
