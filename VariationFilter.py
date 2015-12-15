@@ -18,15 +18,15 @@ def trim(y):
     return y
 
 
-def set_to_type(list_item, file,string,genestring):
+def set_to_type(list_item, file,string,genestring,list_type):
     """
 
     :param listitem:listitem
     :param file:file intergenic or intron
     """
     list_item[2] = string
-    list_item[3] = str(int(ExonsList[-2][1]) + 1)
-    list_item[4] = str(int(ExonsList[-1][0]) - 1)
+    list_item[3] = str(int(list_type[-2][1]) + 1)
+    list_item[4] = str(int(list_type[-1][0]) - 1)
     list_item[-1] = genestring
     file.write(trim(str(list_item)))
 def convert_to_type(list_item,list_type,file,string,genestring):
@@ -40,9 +40,9 @@ def convert_to_type(list_item,list_type,file,string,genestring):
     list_type.append(tmp)
     if len(list_type)>2:
         list_type.pop(0)
-        set_to_type(list_item,file,string,genestring)
+        set_to_type(list_item,file,string,genestring,list_type)
     elif len(list_type)==2:
-        set_to_type(list_item,file,string,genestring)
+        set_to_type(list_item,file,string,genestring,list_type)
 ExonsList= []
 GenesList=[]
 scaffold=''
