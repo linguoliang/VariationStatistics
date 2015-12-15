@@ -55,7 +55,7 @@ opts, args = getopt.getopt(sys.argv[1:], 'i:t:h', ['inputfile=','type=', 'help']
 InputFileName = ''
 for o, a in opts:
     if o in ['-i', '--inputfile']:
-        fpkm = a
+        InputFileName = a
     elif o in ['-t','--type']:
         etype=a
     elif o in ['-h', '--help']:
@@ -67,18 +67,20 @@ with open(InputFileName, 'w') as InputFile:
                 with open(InputFileName+'-intergenic','w') as intergenic:
                     for item in InputFile:
                         listitem=item.split();
-                        if scaffold!=listitem[0]:
-                            GenesList=[]
-                            ExonsList=[]
-                        if listitem[2]==etype:
-                            cds.write(trim(str(listitem)))
-                        elif listitem[2].find('UTR')!=-1:
-                            utr.write(trim(str(listitem)))
-                        elif listitem[2]=='gene':
-                            tmpname=gene
-                            gene=listitem[-1]
-                            convert_to_type(listitem,GenesList,intergenic,'intergenic',tmpname+';'+gene)
-                            ExonsList=[]
-                        if listitem[2]=='exon':
-                            convert_to_type(listitem,ExonsList,intron,'intron',gene)
+                        if len(listitem)!=0:
+                            if scaffold!=listitem[0]:
+                                scaffold=listitem[0]
+                                GenesList=[]
+                                ExonsList=[]
+                            if listitem[2]==etype:
+                                cds.write(trim(str(listitem)))
+                            elif listitem[2].find('UTR')!=-1:
+                                utr.write(trim(str(listitem)))
+                            elif listitem[2]=='gene':
+                                tmpname=gene
+                                gene=listitem[-1]
+                                convert_to_type(listitem,GenesList,intergenic,'intergenic',tmpname+';'+gene)
+                                ExonsList=[]
+                            if listitem[2]=='exon':
+                                convert_to_type(listitem,ExonsList,intron,'intron',gene)
 print('starts at :' + time.strftime('%Y-%m-%d %H:%M:%S'))
