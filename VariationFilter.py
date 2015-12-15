@@ -1,6 +1,7 @@
 __author__ = 'Guoliang Lin'
 Softwarename = 'splitGFF'
-version = '1.0.1'
+version = '1.0.2'
+data=""
 bugfixs = ''
 import sys, getopt
 import time
@@ -60,7 +61,7 @@ for o, a in opts:
         etype=a
     elif o in ['-h', '--help']:
         help = True
-with open(InputFileName, 'w') as InputFile:
+with open(InputFileName, 'r') as InputFile:
     with open(InputFileName+'-'+etype,'w') as cds:
         with open(InputFileName+'-intron','w') as intron:
             with open(InputFileName+'-utr','w') as utr:
